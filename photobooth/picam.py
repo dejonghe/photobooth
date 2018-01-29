@@ -1,5 +1,6 @@
 import logging
 import picamera
+import os
 import time
 
 logger = logging.getLogger('photobooth')
