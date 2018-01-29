@@ -31,7 +31,7 @@ class PhotoBooth(object):
         self.img_prefix = os.path.join(os.getcwd(),'images')
         self._ensure_img_path()
         if Camera:
-            self.camera = Camera()
+            self.camera = Camera(width,height)
         else:
             self.camera = None
         pygame.time.set_timer(chbkg_event, chbkg_time)

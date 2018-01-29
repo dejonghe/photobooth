@@ -8,6 +8,6 @@ class Camera(object):
 
     def preview(self):
         with picamera.PiCamera() as camera:
-            camera.resolution(self.width,self.height)
+            camera.resolution = (self.width,self.height)
             camera.hflip = True
             camera.start_preview()
