@@ -29,7 +29,8 @@ class Camera(object):
                     time.sleep(.5)
 
                 camera.annotate_text = ''
-                camera.capture( os.path.join(self.img_path, 'image', str(pNum), '.jpg') )
+                filename = os.path.join(self.img_path, 'image{}.jpg'.format(str(pNum)))
+                camera.capture( filename )
                 time.sleep(.5)
 
             # Stop the camera preview so we can return to the pygame surface
