@@ -5,6 +5,13 @@ import random
 import sys
 import time
 
+
+try:
+    from picam import Camera
+except:
+    Camera = None
+    print('No pi cam')
+    
 # Init some pygame util stuff 
 pygame.init()
 width = pygame.display.Info().current_w
@@ -23,6 +30,10 @@ class PhotoBooth(object):
         self.font = pygame.font.SysFont("monospace",24)
         self.img_prefix = os.path.join(os.getcwd(),'images')
         self._ensure_img_path()
+        if Camera:
+            self.camera = Camera()
+        else:
+            self.camera = None
         pygame.time.set_timer(chbkg_event, chbkg_time)
 
     '''
@@ -36,7 +47,8 @@ class PhotoBooth(object):
                 if event.type == pygame.QUIT: sys.exit()
                 elif event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE: pygame.display.toggle_fullscreen()
                 elif event.type == pygame.MOUSEBUTTONDOWN:
-                    self._display_text("BUTTON CLICKED")
+                    if self.camera:
+                        self.camera.preview()
                 elif event.type == chbkg_event:
                     self._display_image(self._random_file())
                     pygame.display.flip()
