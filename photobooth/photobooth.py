@@ -36,7 +36,7 @@ class PhotoBooth(object):
         self._ensure_img_path()
         if Camera:
             logger.debug('cam init')
-            self.camera = Camera(width,height)
+            self.camera = Camera(self.img_prefix,width,height)
         else:
             logger.debug('No cam')
             self.camera = None
