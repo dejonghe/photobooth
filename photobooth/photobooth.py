@@ -1,4 +1,4 @@
-
+import logging
 import os
 import pygame
 import random
@@ -6,13 +6,16 @@ import sys
 import time
 
 
+logger = logging.getLogger('photobooth')
+
 try:
     from picam import Camera
 except:
     Camera = None
-    print('No pi cam')
+    logger.debug('No pi cam')
     
 # Init some pygame util stuff 
+logger.debug('Initializing GUI')
 pygame.init()
 width = pygame.display.Info().current_w
 height = pygame.display.Info().current_h
@@ -25,14 +28,17 @@ chbkg_time = 2000
 
 class PhotoBooth(object):
     def __init__(self):
+        logger.debug('Building Photobooth')
         self.screen = pygame.display.set_mode(size)
         self.clock = pygame.time.Clock()
         self.font = pygame.font.SysFont("monospace",24)
         self.img_prefix = os.path.join(os.getcwd(),'images')
         self._ensure_img_path()
         if Camera:
+            logger.debug('cam init')
             self.camera = Camera(width,height)
         else:
+            logger.debug('No cam')
             self.camera = None
         pygame.time.set_timer(chbkg_event, chbkg_time)
 
@@ -40,6 +46,7 @@ class PhotoBooth(object):
         Runs the pygame application
     '''
     def run(self):
+        logger.debug('Entering main event loop')
         self._display_image(self._random_file())
         pygame.display.flip()
         while 1:
