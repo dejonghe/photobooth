@@ -8,11 +8,13 @@ import time
 
 logger = logging.getLogger('photobooth')
 
-try:
-    from picam import Camera
-except:
-    Camera = None
-    logger.debug('No pi cam')
+#try:
+#    from picam import Camera
+#except:
+#    Camera = None
+#    logger.debug('No pi cam')
+
+from picam import Camera
     
 # Init some pygame util stuff 
 logger.debug('Initializing GUI')

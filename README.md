@@ -24,3 +24,11 @@ pip install picamera
 ```
 $ photobooth
 ```
+
+
+
+# To Do 
+[] Do math on image sizes 
+[] Hookup DSLR option
+[] Img Stitch 
+[] Print 

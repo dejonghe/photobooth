@@ -2,6 +2,13 @@ import logging
 import picamera
 import os
 import time
+#try:
+    #from dslr import DSLR
+#except ImportError:
+    #DSLR = None
+    #pass
+from dslr import DSLR
+
 
 logger = logging.getLogger('photobooth')
 
@@ -30,7 +37,14 @@ class Camera(object):
 
                 camera.annotate_text = ''
                 filename = os.path.join(self.img_path, 'image{}.jpg'.format(str(pNum)))
-                camera.capture( filename )
+                logger.debug('trying dslr')
+                if DSLR:
+                    logger.debug('DSLR in use')
+                    dslr = DSLR(self.img_path, self.width, self.height)
+                    dslr.capture()
+                else:
+                    logger.debug('PiCam in use')
+                    camera.capture( filename )
                 time.sleep(.5)
 
             # Stop the camera preview so we can return to the pygame surface
