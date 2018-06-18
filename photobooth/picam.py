@@ -20,6 +20,7 @@ class Camera(object):
         self.height = height
 
     def preview(self):
+        images = []
         with picamera.PiCamera() as camera:
             logger.debug('Camera started')
             camera.resolution = (self.width,self.height)
@@ -36,12 +37,13 @@ class Camera(object):
                     time.sleep(.5)
 
                 camera.annotate_text = ''
-                filename = os.path.join(self.img_path, 'image{}.jpg'.format(str(pNum)))
+                filename = os.path.join(self.img_path, "{}.jpg".format(str(int(time.time()))))
+                images.append(filename)
                 logger.debug('trying dslr')
                 if DSLR:
                     logger.debug('DSLR in use')
                     dslr = DSLR(self.img_path, self.width, self.height)
-                    dslr.capture()
+                    dslr.capture( filename )
                 else:
                     logger.debug('PiCam in use')
                     camera.capture( filename )
@@ -49,4 +51,4 @@ class Camera(object):
 
             # Stop the camera preview so we can return to the pygame surface
             camera.stop_preview()
-
+            return images

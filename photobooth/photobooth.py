@@ -15,6 +15,7 @@ logger = logging.getLogger('photobooth')
 #    logger.debug('No pi cam')
 
 from picam import Camera
+from boothprint import BoothPrint
     
 # Init some pygame util stuff 
 logger.debug('Initializing GUI')
@@ -57,13 +58,15 @@ class PhotoBooth(object):
                 elif event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE: pygame.display.toggle_fullscreen()
                 elif event.type == pygame.MOUSEBUTTONDOWN:
                     if self.camera:
-                        self.camera.preview()
+                        images = self.camera.preview()
+                        boothprint = BoothPrint(images)
+              
                 elif event.type == chbkg_event:
                     self._display_image(self._random_file())
                     pygame.display.flip()
 
     '''
-        Displays text on the screen
+    Displays text on the screen
     '''
     def _display_text(self, text):
         text = self.font.render(text,True,(white))
@@ -74,14 +77,14 @@ class PhotoBooth(object):
         pygame.display.flip()
 
     '''
-        Ensures that image directory is avaliable
+    Ensures that image directory is avaliable
     ''' 
     def _ensure_img_path(self):
         if not os.path.exists(self.img_prefix):
             os.makedirs(self.img_prefix)
 
     '''
-        This function finds a random file in the images bank
+    This function finds a random file in the images bank
     '''
     def _random_file(self):
         files = [os.path.join(path, filename)
@@ -90,7 +93,7 @@ class PhotoBooth(object):
         return random.choice(files)
 
     '''
-        Displays an image to the screen
+    Displays an image to the screen
     '''
     def _display_image(self,file_path):
         self.screen.fill((0,0,0))

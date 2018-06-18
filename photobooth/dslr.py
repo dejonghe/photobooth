@@ -57,9 +57,9 @@ class DSLR(object):
         image = Image.open(io.BytesIO(file_data))
         image.show()
         gp.check_result(gp.gp_camera_exit(camera))
-        return 0
+        return image
 
-    def capture(self):
+    def capture(self, target):
         gp.check_result(gp.use_python_logging())
         camera = gp.check_result(gp.gp_camera_new())
         gp.check_result(gp.gp_camera_init(camera))
@@ -67,7 +67,6 @@ class DSLR(object):
         file_path = gp.check_result(gp.gp_camera_capture(
             camera, gp.GP_CAPTURE_IMAGE))
         print('Camera file path: {0}/{1}'.format(file_path.folder, file_path.name))
-        target = os.path.join(self.img_path, str(int(time.time())) + '.jpg')
         print('Copying image to', target)
         camera_file = gp.check_result(gp.gp_camera_file_get(
                 camera, file_path.folder, file_path.name, gp.GP_FILE_TYPE_NORMAL))
