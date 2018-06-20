@@ -13,6 +13,7 @@ print_size = (300*6,300*4)
 image_size = (900,600)
 panel_size = (900,500)
 title_border = (300*4,200)
+print_images = False
 printer_name = 'selphy'
 
 class BoothPrint(object):
@@ -45,7 +46,8 @@ class BoothPrint(object):
         return print_name
 
     def printer(self):
-        conn = cups.Connection()
-        print_id = conn.printFile(printer_name, self.boothprint, 'PhotoBooth', {})
-        while conn.getJobs().get(print_id):
-            time.sleep(1)
+        if print_images:
+            conn = cups.Connection()
+            print_id = conn.printFile(printer_name, self.boothprint, 'PhotoBooth', {})
+            while conn.getJobs().get(print_id):
+                time.sleep(1)
