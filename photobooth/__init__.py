@@ -1,4 +1,3 @@
-
 from photobooth import PhotoBooth
 from logger import console_logger, logging
 

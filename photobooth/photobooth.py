@@ -6,6 +6,13 @@ import sys
 import time
 
 
+try:
+    from configparser import ConfigParser
+except ImportError:
+    # Python < 3
+    from ConfigParser import ConfigParser
+
+
 logger = logging.getLogger('photobooth')
 
 #try:
@@ -32,9 +39,13 @@ chbkg_time = 2000
 class PhotoBooth(object):
     def __init__(self):
         logger.debug('Building Photobooth')
+        config = ConfigParser()
+        config.read('./.photobooth.cfg')
+        font = config.get('photobooth','font')
+        font_size = config.get('photobooth','font_size')
         self.screen = pygame.display.set_mode(size)
         self.clock = pygame.time.Clock()
-        self.font = pygame.font.SysFont("monospace",24)
+        self.font = pygame.font.SysFont(font,font_size)
         self.img_prefix = os.path.join(os.getcwd(),'images')
         self._ensure_img_path()
         if Camera:
