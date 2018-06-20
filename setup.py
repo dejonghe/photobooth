@@ -99,6 +99,7 @@ setup(
     # https://packaging.python.org/en/latest/requirements.html
     install_requires=[
 #        'pygame>=1.9.3'
+         'pycups>=1.9.73'
     ],
 
     # List additional groups of dependencies here (e.g. development

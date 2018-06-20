@@ -60,6 +60,7 @@ class PhotoBooth(object):
                     if self.camera:
                         images = self.camera.preview()
                         boothprint = BoothPrint(images)
+                        boothprint.printer()
               
                 elif event.type == chbkg_event:
                     self._display_image(self._random_file())
