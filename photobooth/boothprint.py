@@ -1,24 +1,31 @@
+import ast
 import cups
 import logging 
 import time
 from PIL import Image, ImageDraw, ImageFont
+
+try:
+    from configparser import ConfigParser
+except ImportError:
+    # Python < 3
+    from ConfigParser import ConfigParser
 
 logger = logging.getLogger('photobooth')
 
 class BoothPrint(object):
     def __init__(self, images=[], config_file='./.photobooth.cfg'):
         self.images = images
-        self.boothprint = self._combine(self.images)
         logger.info('Booth print loading config')
         config = ConfigParser()
         config.read(config_file)
-        self.print_size = config.get('prints','print_size')
-        self.image_size = config.get('prints','image_size')
-        self.panel_size = config.get('prints','panel_size')
-        self.title_border = config.get('prints','title_border')
+        self.print_size = ast.literal_eval(config.get('prints','print_size'))
+        self.image_size = ast.literal_eval(config.get('prints','image_size'))
+        self.panel_size = ast.literal_eval(config.get('prints','panel_size'))
+        self.title_border = ast.literal_eval(config.get('prints','title_border'))
         self.title_message = config.get('prints','title_message')
-        self.print_images = config.get('prints','print_images')
+        self.print_images = ast.literal_eval(config.get('prints','print_images'))
         self.printer_name = config.get('prints','printer_name')
+        self.boothprint = self._combine(self.images)
         
         
 
@@ -48,6 +55,6 @@ class BoothPrint(object):
     def printer(self):
         if self.print_images:
             conn = cups.Connection()
-            print_id = conn.printFile(printer_name, self.boothprint, 'PhotoBooth', {})
+            print_id = conn.printFile(self.printer_name, self.boothprint, 'PhotoBooth', {})
             while conn.getJobs().get(print_id):
                 time.sleep(1)

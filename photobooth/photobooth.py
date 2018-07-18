@@ -42,7 +42,7 @@ class PhotoBooth(object):
         config = ConfigParser()
         config.read('./.photobooth.cfg')
         font = config.get('photobooth','font')
-        font_size = config.get('photobooth','font_size')
+        font_size = int(config.get('photobooth','font_size'))
         self.screen = pygame.display.set_mode(size)
         self.clock = pygame.time.Clock()
         self.font = pygame.font.SysFont(font,font_size)
