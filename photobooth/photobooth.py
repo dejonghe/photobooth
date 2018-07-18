@@ -5,6 +5,7 @@ import random
 import sys
 import time
 
+import gphoto2 as gp
 
 try:
     from configparser import ConfigParser
@@ -55,27 +56,42 @@ class PhotoBooth(object):
             logger.debug('No cam')
             self.camera = None
         pygame.time.set_timer(chbkg_event, chbkg_time)
+        pygame.display.toggle_fullscreen()
+        pygame.mouse.set_visible(False)
 
     '''
         Runs the pygame application
     '''
     def run(self):
-        logger.debug('Entering main event loop')
-        self._display_image(self._random_file())
-        pygame.display.flip()
-        while 1:
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT: sys.exit()
-                elif event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE: pygame.display.toggle_fullscreen()
-                elif event.type == pygame.MOUSEBUTTONDOWN:
-                    if self.camera:
-                        images = self.camera.preview()
-                        boothprint = BoothPrint(images)
-                        boothprint.printer()
-              
-                elif event.type == chbkg_event:
-                    self._display_image(self._random_file())
-                    pygame.display.flip()
+        try:
+            logger.debug('Entering main event loop')
+            self._display_image(self._random_file())
+            pygame.display.flip()
+            while 1:
+                for event in pygame.event.get():
+                    if event.type == pygame.QUIT: sys.exit()
+                    elif event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE: pygame.display.toggle_fullscreen()
+                    elif event.type == pygame.MOUSEBUTTONDOWN:
+                        if self.camera:
+                            images = self.camera.preview()
+                            boothprint = BoothPrint(images)
+                            boothprint.printer()
+                  
+                    elif event.type == chbkg_event:
+                        self._display_image(self._random_file())
+                        pygame.display.flip()
+        except gp.GPhoto2Error as e:
+            logger.error(e.string)
+            self.screen.fill(black)
+            self._display_text(e.string)
+            time.sleep(5)
+            self.run()
+        except Exception as e:
+            logger.error(e)
+            self.screen.fill(black)
+            self._display_text(e)
+            time.sleep(5)
+            self.run()
 
     '''
     Displays text on the screen
