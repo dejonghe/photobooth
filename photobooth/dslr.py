@@ -19,59 +19,27 @@ class DSLR(object):
         self.height = height
         
 
-    def preview(self):
-        gp.check_result(gp.use_python_logging())
-        camera = gp.check_result(gp.gp_camera_new())
-        gp.check_result(gp.gp_camera_init(camera))
-        # required configuration will depend on camera type!
-        print('Checking camera config')
-        # get configuration tree
-        config = gp.check_result(gp.gp_camera_get_config(camera))
-        # find the image format config item
-        OK, image_format = gp.gp_widget_get_child_by_name(config, 'imageformat')
-        if OK >= gp.GP_OK:
-            # get current setting
-            value = gp.check_result(gp.gp_widget_get_value(image_format))
-            # make sure it's not raw
-            if 'raw' in value.lower():
-                print('Cannot preview raw images')
-                return 1
-        # find the capture size class config item
-        # need to set this on my Canon 350d to get preview to work at all
-        OK, capture_size_class = gp.gp_widget_get_child_by_name(
-            config, 'capturesizeclass')
-        if OK >= gp.GP_OK:
-            # set value
-            value = gp.check_result(gp.gp_widget_get_choice(capture_size_class, 2))
-            gp.check_result(gp.gp_widget_set_value(capture_size_class, value))
-            # set config
-            gp.check_result(gp.gp_camera_set_config(camera, config))
-        # capture preview image (not saved to camera memory card)
-        print('Capturing preview image')
-        camera_file = gp.check_result(gp.gp_camera_capture_preview(camera))
-        file_data = gp.check_result(gp.gp_file_get_data_and_size(camera_file))
-        # display image
-        data = memoryview(file_data)
-        print(type(data), len(data))
-        print(data[:10].tolist())
-        image = Image.open(io.BytesIO(file_data))
-        image.show()
-        gp.check_result(gp.gp_camera_exit(camera))
-        return image
-
     def capture(self, target):
+        orig_target = '{}_{}'.format(target.rstrip('.jpg'),'orig.jpg')
         gp.check_result(gp.use_python_logging())
         camera = gp.check_result(gp.gp_camera_new())
         gp.check_result(gp.gp_camera_init(camera))
-        print('Capturing image')
+        logger.debug('Capturing image')
         file_path = gp.check_result(gp.gp_camera_capture(
             camera, gp.GP_CAPTURE_IMAGE))
-        print('Camera file path: {0}/{1}'.format(file_path.folder, file_path.name))
-        print('Copying image to', target)
+        logger.debug('Camera file path: {0}/{1}'.format(file_path.folder, file_path.name))
+        logger.debug('Copying image to: {}'.format(orig_target))
         camera_file = gp.check_result(gp.gp_camera_file_get(
                 camera, file_path.folder, file_path.name, gp.GP_FILE_TYPE_NORMAL))
-        gp.check_result(gp.gp_file_save(camera_file, target))
+        gp.check_result(gp.gp_file_save(camera_file, orig_target))
         gp.check_result(gp.gp_camera_exit(camera))
+        self.flip(orig_target,target)
         return 0
 
 
+    def flip(self,image_filename,output_filename):
+        logger.debug('Flipping: {} to {}'.format(image_filename,output_filename))
+        image = Image.open(image_filename)
+        flipped_image = image.transpose(Image.FLIP_LEFT_RIGHT)
+        flipped_image.save(output_filename)
+        return True

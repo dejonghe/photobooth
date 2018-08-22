@@ -23,6 +23,7 @@ class BoothPrint(object):
         self.panel_size = ast.literal_eval(config.get('prints','panel_size'))
         self.title_border = ast.literal_eval(config.get('prints','title_border'))
         self.title_message = config.get('prints','title_message')
+        self.title_font = config.get('prints','title_font')
         self.print_images = ast.literal_eval(config.get('prints','print_images'))
         self.printer_name = config.get('prints','printer_name')
         self.boothprint = self._combine(self.images)
@@ -46,8 +47,8 @@ class BoothPrint(object):
         h_inner_panel_border = [(0, self.panel_size[1]),(self.print_size[0],self.panel_size[1])]
         draw.line(v_inner_panel_border, fill='#fff', width=10)
         draw.line(h_inner_panel_border, fill='#fff', width=10)
-        font = ImageFont.truetype("/usr/share/fonts/truetype/piboto/Piboto-Bold.ttf", 100)
-        draw.text((50, self.print_size[1] - self.title_border[1] + 40),"Derek & Tanya's Wedding 08/04/2018",'#fff',font=font)
+        font = ImageFont.truetype(self.title_font, 100)
+        draw.text((180, self.print_size[1] - self.title_border[1] + 40),self.title_message,'#fff',font=font)
         print_name = "images/prints/{}.jpg".format(str(int(time.time())))
         boothprint.save(print_name)
         return print_name
@@ -58,3 +59,5 @@ class BoothPrint(object):
             print_id = conn.printFile(self.printer_name, self.boothprint, 'PhotoBooth', {})
             while conn.getJobs().get(print_id):
                 time.sleep(1)
+                return True
+        return False
