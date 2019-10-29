@@ -79,7 +79,8 @@ setup(
         'Programming Language :: Python :: 3.3',
         'Programming Language :: Python :: 3.4',
         'Programming Language :: Python :: 3.5',
-        'Programming Language :: Python :: 3.6'
+        'Programming Language :: Python :: 3.6',
+        'Programming Language :: Python :: 3.7'
     ],
 
     # What does your project relate to?
@@ -98,7 +99,9 @@ setup(
     # requirements files see:
     # https://packaging.python.org/en/latest/requirements.html
     install_requires=[
-#        'pygame>=1.9.3'
+         'picamera',
+         'gphoto2>=1.7.1',
+         'pygame>=1.9.3',
          'pycups>=1.9.73'
     ],
 

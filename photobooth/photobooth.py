@@ -103,7 +103,7 @@ class PhotoBooth(object):
                         self._display_image(self._random_file())
                         pygame.display.flip()
                     elif event.type == tts_event:
-                        self._display_text("Touch screen to start")
+                        self._display_text("Touch screen to start".encode('utf-8'))
                         pygame.display.flip()
                     pygame.event.clear()
         except gp.GPhoto2Error as e:
