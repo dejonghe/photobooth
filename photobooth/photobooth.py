@@ -99,13 +99,13 @@ class PhotoBooth(object):
                                 with open(config_file_name, 'wb') as f:
                                     self.config.write(f)
                             time.sleep(10)
+                        pygame.event.clear()
                     elif self.show_images and event.type == chbkg_event:
                         self._display_image(self._random_file())
                         pygame.display.flip()
                     elif event.type == tts_event:
                         self._display_text("Touch screen to start".encode('utf-8'))
                         pygame.display.flip()
-                    pygame.event.clear()
         except gp.GPhoto2Error as e:
             logger.error(e.string)
             self._display_text(e.string)
@@ -122,7 +122,7 @@ class PhotoBooth(object):
     '''
     def _display_text(self, text):
         self.screen.fill(black)
-        text = self.font.render(text,True,(white))
+        text = self.font.render(str(text),True,(white))
         textrect = text.get_rect()
         textrect.centerx = self.screen.get_rect().centerx
         textrect.centery = self.screen.get_rect().centery

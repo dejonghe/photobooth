@@ -31,7 +31,7 @@ class BoothPrint(object):
         
 
     def _combine(self, images):
-        boothprint = Image.new('RGBA', self.print_size)
+        boothprint = Image.new('RGB', self.print_size)
         columns = self.print_size[0] / self.panel_size[0]
         rows  = 2 # self.print_size[1] / self.panel_size[1]
         i = 0
