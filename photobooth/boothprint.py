@@ -31,6 +31,7 @@ class BoothPrint(object):
         
 
     def _combine(self, images):
+        logger.debug('Running Combine')
         boothprint = Image.new('RGB', self.print_size)
         columns = self.print_size[0] / self.panel_size[0]
         rows  = 2 # self.print_size[1] / self.panel_size[1]
@@ -50,12 +51,18 @@ class BoothPrint(object):
         font = ImageFont.truetype(self.title_font, 100)
         draw.text((180, self.print_size[1] - self.title_border[1] + 40),self.title_message,'#fff',font=font)
         print_name = "images/prints/{}.jpg".format(str(int(time.time())))
+        logger.debug("Attempting save {}".format(str(print_name)))
         boothprint.save(print_name)
         return print_name
 
     def printer(self):
+        logger.debug('Entering Printer Setup')
         if self.print_images:
+            logger.debug('Attempting Connection to Cups')
             conn = cups.Connection()
+            logger.debug('Connectioned to Cups')
+            conn = cups.Connection()
+            logger.debug("Attempting to print {}".format(self.boothprint))
             print_id = conn.printFile(self.printer_name, self.boothprint, 'PhotoBooth', {})
             while conn.getJobs().get(print_id):
                 time.sleep(1)

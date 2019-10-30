@@ -1,3 +1,6 @@
 #!/bin/bash
 
 apt-get install -y cups python3-cups python-cups build-essential g++-arm-linux-gnueabihf gdb-multiarch libgphoto2-6 libgphoto2-dev libffi-dev 
+
+sudo usermod -a -G lpadmin pi
+

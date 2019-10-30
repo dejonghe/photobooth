@@ -107,12 +107,12 @@ class PhotoBooth(object):
                         self._display_text("Touch screen to start".encode('utf-8'))
                         pygame.display.flip()
         except gp.GPhoto2Error as e:
-            logger.error(e.string)
+            logger.exception(e.string)
             self._display_text(e.string)
             time.sleep(5)
             self.run()
         except Exception as e:
-            logger.error(e)
+            logger.exception(e)
             self._display_text(e)
             time.sleep(5)
             self.run()
