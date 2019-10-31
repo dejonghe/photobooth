@@ -39,4 +39,15 @@ $ photobooth
 [x] Hookup DSLR option
 [x] Img Stitch 
 [x] Print 
-[] Handle Errors
+[x] Handle Errors
+
+# Setting up the pi
+
+* Install raspbian with all the bells and whistles on SD
+* Install LCD Screen
+* Flip LCD Touchscrren (Optional) `sudo echo 'lcd_rotate=2' >> /boot/config.txt; sudo reboot`
+* Enable PiCamera
+* Clone repo `git clone git@github.com:dejonghe/photobooth.git`
+* Install deb pkgs `sudo bash apt-requirements`
+* Build / install (I've been using `pip install -e .` so i can tweak as i use)
+
